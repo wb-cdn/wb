@@ -40,7 +40,7 @@
         currentModeLabel: 'WinGo 1Min',
         lvl: 0,
         lp: '',
-        pred: 'BIG',
+        pred: (Math.random() < 0.5 ? 'BIG' : 'SMALL'),
         active: false,
         startBal: 0,
         targetBal: 2000,
@@ -1029,26 +1029,11 @@
         } catch (_) {}
     };
 
-    // ─── Statistical Engine ──────────────────────────────────────────────────
+    // ─── Dynamic Randomized Engine (Har Period Pe Ek New Random Pick) ────────
     var scanEngineMatrix = function (engineData) {
-        if (!engineData || engineData.length < 3) return { pred: 'BIG', track: 'SIZE' };
-
-        var recent = engineData.slice(0, 30);
-        var numbers = recent.map(x => parseInt(x.number));
-        var sizes = numbers.map(n => n >= 5 ? 'BIG' : 'SMALL');
-
-        var lastSize = sizes[0];
-        var sCount = 0;
-        for (var j = 0; j < sizes.length; j++) {
-            if (sizes[j] === lastSize) sCount++;
-            else break;
-        }
-
-        if (sCount >= 2) return { pred: lastSize, track: 'SIZE' };
-
-        var bigFreq = sizes.filter(s => s === 'BIG').length;
-        var smallFreq = sizes.length - bigFreq;
-        return { pred: bigFreq >= smallFreq ? 'BIG' : 'SMALL', track: 'SIZE' };
+        // Randomly pick BIG or SMALL on every round (50/50 randomized probability)
+        var randomPick = Math.random() < 0.5 ? 'BIG' : 'SMALL';
+        return { pred: randomPick, track: 'SIZE' };
     };
 
     // ─── Automated Bet Dispatcher ────────────────────────────────────────────
@@ -1194,10 +1179,9 @@
                 periodEl.innerText = latest.issueNumber;
             }
 
-            var matrix = scanEngineMatrix(st.historyEngine);
-
             // New round settled in the active tab!
             if (latest.issueNumber !== st.lp) {
+                var matrix = scanEngineMatrix(st.historyEngine);
                 var isFirstRun = (st.lp === '');
                 st.lp = latest.issueNumber;
 
