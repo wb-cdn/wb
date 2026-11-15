@@ -878,7 +878,16 @@
             }
         } else {
             if (dot) dot.classList.remove('active');
-            if (ba// ─── Ultra Luxury Fireworks.js Celebration on WIN ────────────────────────
+            if (badge) {
+                badge.innerText = st.currentModeLabel;
+                badge.style.background = 'rgba(6, 182, 212, 0.15)';
+                badge.style.color = '#38bdf8';
+                badge.style.borderColor = 'rgba(6, 182, 212, 0.35)';
+            }
+        }
+    };
+
+    // ─── Ultra Luxury Fireworks.js Celebration on WIN ────────────────────────
     var fwInstance = null;
     var getFireworksEngine = function () {
         if (window.__wb_fireworks) return Promise.resolve(window.__wb_fireworks);
@@ -916,12 +925,12 @@
                 return;
             }
 
-            // Method 1: Try dynamic ESM import from esm.run (matches import { Fireworks } from 'https://esm.run/fireworks-js')
+            // Method 1: Try dynamic ESM import from esm.run
             try {
                 import('https://esm.run/fireworks-js').then(function (mod) {
                     var Cls = (mod && (mod.Fireworks || mod.default)) || window.Fireworks;
                     if (Cls) setup(Cls);
-                    else throw new Error('No class in module');
+                    else throw new Error('No class');
                 }).catch(function () {
                     loadScriptFallback(setup, resolve);
                 });
@@ -972,18 +981,6 @@
                     }, 3000); // Celebrates for 3s on WIN
                 }
             });
-        } catch (_) {}
-    };
-
-    }
-
-                if (Date.now() - startTime < 2500) {
-                    requestAnimationFrame(animate);
-                } else {
-                    canvas.remove();
-                }
-            };
-            requestAnimationFrame(animate);
         } catch (_) {}
     };
 
